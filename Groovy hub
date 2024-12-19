@@ -264,8 +264,9 @@ local function UseCode(Text)
 end
 
 -- Tombol untuk menebus semua kode
-MiscTab:CreateButton({
-    Name = "Redeem All Code",
+local button = MiscTab:Button({
+    Title = "Redeem All Code",
+    Desc = "2x exp code",
     Callback = function()
         -- Daftar kode yang akan ditebus
         local codes = {
@@ -391,7 +392,7 @@ local Toggle = BypassTab:Toggle({
 })
 
 local SettingsTab = Window:Tab({
-    Name = "Settings",
+    Title = "Settings",
     Icon = "settings" -- Ganti dengan ikon yang sesuai jika perlu
 })
 local Toggle = SettingsTab:Toggle({
@@ -470,8 +471,8 @@ spawn(function()
 end)
 
 Local Toggle = SettingsTab:Toggle({
-    Name = "Remove Lava",
-    Desc = "lava like water"
+    Title = "Remove Lava",
+    Desc = "lava like water",
     Callback = function()
         -- Menghapus semua objek bernama "Lava" di Workspace
         for _, v in pairs(game.Workspace:GetDescendants()) do
@@ -491,8 +492,8 @@ Local Toggle = SettingsTab:Toggle({
 
 -- Toggle untuk Infinity Geppo
 local Toggle = SettingsTab:Toggle({
-    Name = "Infinity Geppo",
-    Desc = "Op Feature"
+    Title = "Infinity Geppo",
+    Desc = "Op Feature",
     Callback = function(Value)
         getgenv().InfGeppo = Value
     end
