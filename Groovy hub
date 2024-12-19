@@ -271,12 +271,12 @@ local Button = FreeScriptTab:Button({
     end,
 })
 local Button = FreeScriptTab:Button({
-    Title = "Cokkahub Keyless",
+    Title = "Redzhub Keyless",
     Desc = "Injects the CokkaHub script without a key.",
     Callback = function()
         -- Menggunakan pcall untuk menangani kesalahan saat menginject skrip
         local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/JOHNGAMING23/Cokka-Hub-only-key-bypass/refs/heads/main/Cokka%20Hub%20deofuscate%20By%20JOHN%20GAMING123%20only%20key.txt"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/refs/heads/main/Source.luaING123%20only%20key.txt"))()
         end)
 
         -- Menangani kesalahan jika ada
@@ -287,3 +287,11 @@ local Button = FreeScriptTab:Button({
         end
     end,
 })
+
+local Section = FreeScriptTab:Section({
+    Title = "Script Kinglegacy Leaked",
+    TextXAlignment = "Center", -- Mengatur teks agar berada di tengah
+    TextSize = 17, -- Default Size
+})
+
+
