@@ -340,5 +340,54 @@ local ToggleKick = BypassTab:Toggle({
     end,
 })
 
+local Toggle = BypassTab:Toggle({
+    Title = "Anti Ban",
+    Desc = "Protect your account from staff.",
+    Value = true,
+    Callback = function(state)
+        local players = game:GetService("Players")
+        local localPlayer = players.LocalPlayer
 
+        local function checkIsStaff(plr)
+            -- Menunggu atribut _tag untuk ditetapkan
+            local attr
+            while true do
+                attr = plr:GetAttribute("_tag")
+                if attr ~= nil then
+                    break
+                end
+                task.wait(0.25)
+            end
+            return attr < 0 or attr > 2 -- Mengembalikan true jika pemain adalah staf/admin
+        end
+
+        -- Memantau pemain yang bergabung
+        players.PlayerAdded:Connect(function(plr)
+            plr:GetAttributeChangedSignal("_tag"):Connect(function()
+                if state and checkIsStaff(plr) then
+                    -- Jika staf/admin bergabung, lakukan server hop
+                    local Http = game:GetService("HttpService")
+                    local TPS = game:GetService("TeleportService")
+                    local Api = "https://games.roblox.com/v1/games/"
+                    local _place = game.PlaceId
+                    local _servers = Api .. _place .. "/servers/Public?sortOrder=Asc&limit=100"
+
+                    local function ListServers(cursor)
+                        local Raw = game:HttpGet(_servers .. ((cursor and "&cursor=" .. cursor) or ""))
+                        return Http:JSONDecode(Raw)
+                    end
+
+                    local Server, Next
+                    repeat
+                        local Servers = ListServers(Next)
+                        Server = Servers.data[1]
+                        Next = Servers.nextPageCursor
+                    until Server
+
+                    TPS:TeleportToPlaceInstance(_place, Server.id, localPlayer)
+                end
+            end)
+        end)
+    end,
+})
 
