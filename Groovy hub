@@ -259,7 +259,7 @@ local Button = FreeScriptTab:Button({
     Callback = function()
         -- Menggunakan pcall untuk menangani kesalahan saat menginject skrip
         local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Groodev/Leaked-github/refs/heads/main/README.md"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/berhddb/GOGOHUB_Bloxfruits_Dragon_Update/refs/heads/main/README.md"))()
         end)
 
         -- Menangani kesalahan jika ada
