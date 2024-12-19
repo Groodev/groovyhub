@@ -294,4 +294,51 @@ local Section = FreeScriptTab:Section({
     TextSize = 17, -- Default Size
 })
 
+local BypassTab = Window:Tab({
+    Title = "Bypass",
+    Icon = "shield-alert", -- lucide or rbxassetid
+})
+
+-- Toggle untuk Anti AFK
+local ToggleAFK = BypassTab:Toggle({
+    Title = "Anti AFK",
+    Desc = "AFK bypass",
+    Value = true,
+    Callback = function(state)
+        getgenv().AntiAFK = state -- Mengatur nilai AntiAFK sesuai dengan state toggle
+
+        task.spawn(function()
+            while wait(0.1) do
+                if getgenv().AntiAFK then
+                    local vu = game:GetService("VirtualUser ")
+                    game:GetService("Players").LocalPlayer.Idled:connect(function()
+                        vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+                        wait(1)
+                        vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+                    end)
+                end
+            end
+        end)
+    end,
+})
+
+-- Toggle untuk Anti Kick
+local ToggleKick = BypassTab:Toggle({
+    Title = "Anti Kick",
+    Desc = "You won't be kicked!",
+    Value = true,
+    Callback = function(state)
+        getgenv().AntiKickClient = state -- Mengatur nilai AntiKickClient sesuai dengan state toggle
+
+        task.spawn(function()
+            while wait() do
+                if getgenv().AntiKickClient then
+                    loadstring(game:HttpGet('https://gitlab.com/Sky2836/BT/-/raw/main/antikickclient'))()
+                end
+            end
+        end)
+    end,
+})
+
+
 
