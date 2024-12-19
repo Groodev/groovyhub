@@ -391,3 +391,82 @@ local Toggle = BypassTab:Toggle({
     end,
 })
 
+local SettingsTab = Window:Tab({
+    Name = "Settings",
+    Icon = "settings" -- Ganti dengan ikon yang sesuai jika perlu
+})
+local Toggle = SettingsTab:Toggle({
+    Title = "WalkOnWater",
+    Desc = "Allow you to walk on water",
+    Value = true,
+    Callback = function(state)
+        _G.WalkWater = Value
+    end    
+})
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.WalkWater then
+                game:GetService("Workspace").Map["WaterBase-Plane"].Size = Vector3.new(1000, 112, 1000)
+            else
+                game:GetService("Workspace").Map["WaterBase-Plane"].Size = Vector3.new(1000, 80, 1000)
+            end
+        end)
+    end
+end)
+
+local Toggle = SettingsTab:Toggle({
+    Name = "Infinity Soru",
+    Desc = "OP feature",
+    Callback = function(Value)
+        getgenv().InfSoru = Value
+    end    
+})
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if getgenv().InfSoru and game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                for _, v in next, getgc() do
+                    if game:GetService("Players").LocalPlayer.Character:FindFirstChild("Soru") then
+                        if typeof(v) == "function" and getfenv(v).script == game:GetService("Players").LocalPlayer.Character.Soru then
+                            for _, v2 in next, getupvalues(v) do
+                                if typeof(v2) == "table" then
+                                    repeat wait(0.1)
+                                        v2.LastUse = 0
+                                    until not getgenv().InfSoru or game:GetService("Players").LocalPlayer.Character.Humanoid.Health <= 0
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+-- Toggle untuk No Clip
+local Toggle = SettingsTab:Toggle({
+    Name = "No Clip",
+    Desc = "classic no clip bitch",
+    Callback = function(Value)
+        _G.NOCLIP = Value
+    end    
+})
+
+spawn(function()
+    while wait() do
+        if _G.NOCLIP then
+            local player = game.Players.LocalPlayer
+            if sethiddenproperty then
+                sethiddenproperty(player, "SimulationRadius", 100)
+            end
+            if setscriptable then
+                setscriptable(player, "SimulationRadius", true)
+                player.SimulationRadius = math.huge
+            end
+        end
+    end
+end)
+
