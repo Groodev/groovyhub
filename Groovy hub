@@ -294,6 +294,47 @@ local Section = FreeScriptTab:Section({
     TextSize = 17, -- Default Size
 })
 
+-- Membuat tab untuk Misc
+local MiscTab = Window:Tab({
+    Title = "Misc",
+    Icon = "cog", -- Ikon tab
+})
+
+-- Fungsi untuk menggunakan kode
+local function UseCode(Text)
+    game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer(Text)
+end
+
+-- Tombol untuk menebus semua kode
+MiscTab:CreateButton({
+    Name = "Redeem All Code",
+    Callback = function()
+        -- Daftar kode yang akan ditebus
+        local codes = {
+            "Sub2Fer999",
+            "Enyu_is_Pro",
+            "Magicbus",
+            "JCWK",
+            "Starcodeheo",
+            "Bluxxy",
+            "THEGREATACE",
+            "SUB2GAMERROBOT_EXP1",
+            "StrawHatMaine",
+            "Sub2OfficialNoobie",
+            "SUB2NOOBMASTER123",
+            "Sub2Daigrock",
+            "Axiore",
+            "TantaiGaming",
+            "STRAWHATMAINE"
+        }
+        
+        -- Menggunakan setiap kode dalam daftar
+        for _, code in ipairs(codes) do
+            UseCode(code)
+        end
+    end
+})
+
 local BypassTab = Window:Tab({
     Title = "Bypass",
     Icon = "shield-alert", -- lucide or rbxassetid
