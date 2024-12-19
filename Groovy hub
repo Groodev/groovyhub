@@ -200,7 +200,7 @@ local Button = FreeScriptTab:Button({
     Callback = function()
         -- Menggunakan pcall untuk menangani kesalahan saat menginject skrip
         local success, err = pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/JOHNGAMING23/Cokka-Hub-only-key-bypass/refs/heads/main/Cokka%20Hub%20deofuscate%20By%20JOHN%20GAMING123%20only%20key.txt"))()
+            loadstring(game:HttpGet("y.txt"))()
         end)
 
         -- Menangani kesalahan jika ada
