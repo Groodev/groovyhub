@@ -563,4 +563,46 @@ spawn(function()
         end)
     end
 end)
+-- Slider untuk Speed
+local SpeedSlider = SettingsTab:Slider({
+    Title = "Speed | High Risk",
+    Step = 1,
+    Value = {
+        Min = 1,
+        Max = 120,
+        Default = 26,
+    },
+    Callback = function(value)
+        getgenv().WalkSpeedValue = value -- Mengatur nilai ke WalkSpeedValue
+        local Player = game:GetService("Players").LocalPlayer
+        
+        -- Mengatur WalkSpeed dan menghubungkan perubahan
+        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+            Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue
+            
+            Player.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+                Player.Character.Humanoid.WalkSpeed = getgenv().WalkSpeedValue
+            end)
+        end
+    end
+})
 
+-- Slider untuk Jump Boost
+local JumpSlider = SettingsTab:Slider({
+    Title = "Jump Boost | High Risk",
+    Step = 1,
+    Value = {
+        Min = 1,
+        Max = 120,
+        Default = 50,
+    },
+    Callback = function(value)
+        getgenv().JumpValue = value -- Mengatur nilai ke JumpValue
+        local Player = game:GetService("Players").LocalPlayer
+        
+        -- Mengatur JumpPower
+        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+            Player.Character.Humanoid.JumpPower = getgenv().JumpValue
+        end
+    end
+})
