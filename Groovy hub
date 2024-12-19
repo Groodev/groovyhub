@@ -164,53 +164,6 @@ local Input = Tab:Input({
         end
     end,
 })
-local InfoTab = Window:Tab({
-    Title = "Info",
-    Icon = "info", -- Ganti dengan ikon yang sesuai jika perlu
-})
-
--- Menambahkan paragraf atau teks ke tab
-InfoTab:Paragraph({
-    Title = "Status",
-    Desc = "Checking status of islands and moon...",
-})
-
--- Kemudian, Anda bisa menggunakan metode lain untuk memperbarui informasi
-spawn(function()
-    while task.wait(1) do
-        local locations = game.Workspace:FindFirstChild("_WorldOrigin") and game.Workspace._WorldOrigin:FindFirstChild("Locations")
-        
-        if locations then
-            if locations:FindFirstChild("Mirage Island") then
-                InfoTab:Paragraph({
-                    Title = "Mirage Island",
-                    Desc = "Spawn ✅",
-                })
-            else
-                InfoTab:Paragraph({
-                    Title = "Mirage Island",
-                    Desc = "Not Spawn ❌",
-                })
-            end
-            
-            if locations:FindFirstChild("Kitsune Island") then
-                InfoTab:Paragraph({
-                    Title = "Kitsune Island",
-                    Desc = "Spawn ✅",
-                })
-            else
-                InfoTab:Paragraph({
-                    Title = "Kitsune Island",
-                    Desc = "Not Spawn ❌",
-                })
-            end
-        end
-        
-        -- Pengecekan status bulan
-        local moonTextureId = game:GetService("Lighting").Sky.MoonTextureId
-        -- Tambahkan logika untuk memperbarui status bulan di sini
-    end
-end)
 
 local FreeScriptTab = Window:Tab({
     Title = "Free Script",
