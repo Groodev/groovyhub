@@ -66,76 +66,68 @@ Tab:Button({
     Title = "Server Hopper",
     Desc = "Move To New Server! | Please Wait..",
     Callback = function()
-        local Http = game:GetService("HttpService")
-        local TPS = game:GetService("TeleportService")
-        local Api = "https://games.roblox.com/v1/games/"
-        local _place, _id = game.PlaceId, game.JobId
-        local _servers = Api.._place.."/servers/Public?sortOrder=Desc&limit=100"
-
-        local function ListServers(cursor)
-            local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or ""))
-            return Http:JSONDecode(Raw)
-        end
-
-        local Next
-        repeat
-            local Servers = ListServers(Next)
-            for i, v in next, Servers.data do
-                if v.playing < v.maxPlayers and v.id ~= _id then
-                    local s, r = pcall(TPS.TeleportToPlaceInstance, TPS, _place, v.id, Player)
-                    if s then break end
-                end
-            end
-            Next = Servers.nextPageCursor
-        until not Next
-    end,
+        _G.AutoRejoin = false
+        Hop()
 })
 local Button = Tab:Button({
     Title = "Lower ServerHop",
     Desc = "Move To Lower Server | Please Wait...",
     Callback = function()
-        local Http = game:GetService("HttpService")
-        local TPS = game:GetService("TeleportService")
-        local Api = "https://games.roblox.com/v1/games/"
-
-        local _place = game.PlaceId
-        local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100"
-        
-        local function ListServers(cursor)
-            local Raw = game.HttpGet(game.HttpService, _servers .. ((cursor and "&cursor="..cursor) or ""))
-            return Http:JSONDecode(Raw)
+        _G.AutoRejoin = false
+        getgenv().AutoTeleport = true
+        getgenv().DontTeleportTheSameNumber = true 
+        getgenv().CopytoClipboard = false
+        if not game:IsLoaded() then
+            print("Game is loading waiting...")
         end
-
-        local Server, Next
-        repeat
-            local Servers = ListServers(Next)
-            if Servers.data and #Servers.data > 0 then
-                Server = Servers.data[1]
-            else
-                break -- keluar dari loop jika tidak ada server
+        local maxplayers = math.huge
+        local serversmaxplayer;
+        local goodserver;
+        local gamelink = "https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100" 
+        function serversearch()
+            for _, v in pairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(gamelink)).data) do
+                if type(v) == "table" and v.playing ~= nil and maxplayers > v.playing then
+                    serversmaxplayer = v.maxPlayers
+                    maxplayers = v.playing
+                    goodserver = v.id
+                end
+            end       
+        end
+function getservers()
+            serversearch()
+            for i,v in pairs(game:GetService("HttpService"):JSONDecode(game:HttpGetAsync(gamelink))) do
+                if i == "nextPageCursor" then
+                    if gamelink:find("&cursor=") then
+                        local a = gamelink:find("&cursor=")
+                        local b = gamelink:sub(a)
+                        gamelink = gamelink:gsub(b, "")
+                    end
+                    gamelink = gamelink .. "&cursor=" ..v
+                    getservers()
+                end
             end
-            Next = Servers.nextPageCursor
-        until not Next
-
-        if Server then
-            TPS:TeleportToPlaceInstance(_place, Server.id, game.Players.LocalPlayer)
-        else
-            print("No available servers found.")
+        end 
+getservers()
+        if AutoTeleport then
+            if DontTeleportTheSameNumber then 
+                if #game:GetService("Players"):GetPlayers() - 4  == maxplayers then
+                    return warn("It has same number of players (except you)")
+                elseif goodserver == game.JobId then
+                    return warn("Your current server is the most empty server atm") 
+                end
+            end
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, goodserver)
         end
-    end,
+      end    
+})
 })
 
 local Button = Tab:Button({
     Title = "Rejoin",
     Desc = "Join this server again | Please Wait...",
     Callback = function()
-        local TPS = game:GetService("TeleportService")
-        local Players = game:GetService("Players")
-        local localPlayer = Players.LocalPlayer
-
-        -- Teleport kembali ke tempat yang sama
-        TPS:Teleport(game.PlaceId, localPlayer)
-    end
+        game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
+      end    
 })
 
 local Input = Tab:Input({
@@ -144,15 +136,10 @@ local Input = Tab:Input({
     Callback = function(serverId)
         -- Ensure the serverId is provided
         if serverId and serverId ~= "" then
-            -- Access the ReplicatedStorage and invoke the teleport function
-            local replicatedStorage = game:GetService("ReplicatedStorage")
-            local serverBrowser = replicatedStorage:WaitForChild("__ServerBrowser")
-            
-            -- Invoke the server teleportation
-            local success, message = pcall(function()
-                serverBrowser:InvokeServer('teleport', serverId)
-            end)
-
+            _G.Job = Value 
+_G.AutoRejoin = false
+        game:GetService("TeleportService"):TeleportToPlaceInstance(game.placeId,_G.Job, game.Players.LocalPlayer)
+    end    
             -- Check if the teleportation was successful
             if success then
                 print("Teleportation successful to server ID: " .. serverId)
